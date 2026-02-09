@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 from models.tarefa import Tarefa
 
 app = Flask(__name__)
@@ -23,7 +23,24 @@ def agenda():
 @app.route('/delete/<int:idTarefa>')
 def delete(idTarefa):
     tarefa = Tarefa.id(idTarefa)
-    print(tarefa)
+    tarefa.excluir_tarefa()
+    #return render_template('agenda.html', titulo='Agenda', tarefas=tarefas)
+    return redirect(url_for('agenda'))
+
+@app.route('/update/<int:idTarefa>', methods=['GET', 'POST'])
+def update(idTarefa):
+    
+    if request.method == 'POST':
+        titulo = request.form['titulo-tarefa']
+        data = request.form['data-conclusao']
+        tarefa = Tarefa(titulo, data, idTarefa)
+        tarefa.atualizar_tarefa()
+        return redirect(url_for('agenda'))
+    
+    tarefas = Tarefa.obter_tarefas()
+    tarefa_selecionada = Tarefa.id(idTarefa)
+
+    return render_template('agenda.html', titulo=f'Editando a tarefa ID: {idTarefa}', tarefas=tarefas, tarefa_selecionada=tarefa_selecionada)
 
 @app.route('/ola')
 def ola_mundo():
