@@ -12,3 +12,9 @@ button {
     border-radius: 7px;
     box-shadow: 3px  2px  10px rgba(2, 81, 2, 0.2);
 }
+
+.concluida { 
+    background-color: rgb(115, 255, 115);
+    border-radius: 5px; 
+    padding: 5px; 
+}
